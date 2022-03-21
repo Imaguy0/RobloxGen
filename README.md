@@ -50,7 +50,9 @@ You can contribute to this project by opening issues and making pull requests. I
 
 ## Authors
 
-- [@katherinepeterson](https://www.github.com/octokatherine)
+- [jluims](https://github.com/jluims/) - Made the initial version of this project and reverse-engineered the ROBLOX signup api
+
+- [WaltDisneyWorld](https://github.com/WaltDisneyWorld) - reminding me to resurrect this project from the dead.
 
 
 ## Badges
