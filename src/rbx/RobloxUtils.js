@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import RobloxAccount from './RobloxAccount.js';
 import username from 'username-generator';
 import UserAgent from '../UserAgent.js';
+import { randomBirthday, randomGender } from './RobloxRandomizer.js'
 
 UserAgent();
 
@@ -108,13 +109,13 @@ export default class RobloxUtils {
         '54d8a8f0-d9c8-4cf3-bd26-0cbf8af0bba3',
         '848d8d8f-0e33-4176-bcd9-aa4e22ae7905'
       ],
-      birthday: '07 Sep 1942',
+      birthday: randomBirthday(),
       captchaProvider: 'PROVIDER_ARKOSE_LABS',
       captchaToken: captchaToken,
       context: 'MultiverseSignupForm',
       displayAvatarV2: false,
       displayContextV2: false,
-      gender: 2,
+      gender: randomGender(),
       isTosAgreementBoxChecked: true,
       password: password,
       referralDate: null,
