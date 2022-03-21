@@ -50,9 +50,9 @@ You can contribute to this project by opening issues and making pull requests. I
 
 ## Authors
 
-- [jluims](https://github.com/jluims/) - Made the initial version of this project and reverse-engineered the ROBLOX signup api
+- [jluims](https://github.com/jluims/) - original readme
 
-- [WaltDisneyWorld](https://github.com/WaltDisneyWorld) - reminding me to resurrect this project from the dead.
+- [WaltDisneyWorld](https://github.com/WaltDisneyWorld) - redesigned readme
 
 
 ## Badges
