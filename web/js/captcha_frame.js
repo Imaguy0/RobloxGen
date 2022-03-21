@@ -22,12 +22,3 @@ async function loadChallenge() {
     }
   });
 }
-
-async function getPublicKey() {
-  const url = 'https://apis.rbxcdn.com/captcha/v1/metadata';
-  const res = await fetch(url);
-  const data = await res.json();
-  const publicKeys = data['funCaptchaPublicKeys'];
-
-  return publicKeys['ACTION_TYPE_WEB_SIGNUP'];
-}
