@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import RobloxAccount from './RobloxAccount.js';
 import username from 'username-generator';
 import UserAgent from '../UserAgent.js';
-import { randomBirthday, randomGender } from './RobloxRandomizer.js'
+import { randomBirthday, randomGender } from './RobloxRandomizer.js';
 
 UserAgent();
 
@@ -100,8 +100,8 @@ export default class RobloxUtils {
    * @returns {Promise<RobloxAccount>}
    */
   static async createAccount(captchaToken, captchaId) {
-    const username = await this.genUsername();
-    const password = await this.genPassword();
+    const username = this.genUsername();
+    const password = this.genPassword();
     const url = 'https://auth.roblox.com/v2/signup';
 
     const payload = {
@@ -142,7 +142,7 @@ export default class RobloxUtils {
     const cookie = regex.exec(cookies)?.[1];
 
     if (!cookie) {
-      console.log('[❌] Failed to find a cookie in the response!');
+      console.log(`[❌] Failed to find a cookie in the response!\n${json}`);
       return null;
     }
 

@@ -1,3 +1,5 @@
+import randomUseragent from 'random-useragent';
+
 const months = [
   'Jan',
   'Feb',
@@ -13,10 +15,20 @@ const months = [
   'Dec'
 ];
 
+/**
+ * Generates a number between the two parameters
+ * @param  {number} min
+ * @param  {number} max
+ * @returns {number}
+ */
 function randomBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+/**
+ * Generates a random birthday
+ * @returns {string}
+ */
 function randomBirthday() {
   const randomDay = randomBetween(1, 28); // 28 incase february
   const randomMonth = months[Math.floor(Math.random() * months.length)];
@@ -25,10 +37,19 @@ function randomBirthday() {
   return `${randomDay} ${randomMonth} ${randomYear}`;
 }
 
+/**
+ * Generates a random gender
+ * @returns {number}
+ */
 function randomGender() {
   return randomBetween(1, 2);
 }
 
+/**
+ * Generate a random user agent
+ * @returns {string}
+ * @deprecated Not in use
+ */
 function randomUserAgent() {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const version = randomBetween(0, 9) + '.' + randomBetween(0, 9);
@@ -44,4 +65,6 @@ function randomUserAgent() {
   return endStr;
 }
 
-export { randomBirthday, randomGender };
+const generateUseragent = () => randomUseragent.getRandom();
+
+export { randomBirthday, randomGender, generateUseragent };
