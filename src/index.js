@@ -1,8 +1,6 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
+import dotenv from 'dotenv/config';
 import express from 'express';
-import DBUtil from './DBUtil.js';
+import DBUtil from './db/DBUtil.js';
 import RobloxUtil from './rbx/RobloxUtils.js';
 import cors from 'cors';
 
@@ -54,7 +52,7 @@ app.get('/field_data', async (_, res) => {
 });
 
 (async () => {
-  await DBUtil.setupDB('database.json');
+  await DBUtil.setupDB();
 
   app.listen(process.env.WEB_PORT, () => {
     console.log(

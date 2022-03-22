@@ -2,10 +2,8 @@ import htmlParser from 'node-html-parser';
 import fetch from 'node-fetch';
 import RobloxAccount from './RobloxAccount.js';
 import username from 'username-generator';
-import UserAgent from '../UserAgent.js';
+import UserAgent from 'random-useragent';
 import { randomBirthday, randomGender } from './RobloxRandomizer.js';
-
-UserAgent();
 
 export default class RobloxUtils {
   /**
@@ -28,7 +26,7 @@ export default class RobloxUtils {
     const res = await fetch(url, {
       method: 'POST',
       headers: {
-        'User-Agent': UserAgent(),
+        'User-Agent': UserAgent.getRandom(),
         'x-csrf-token': await this.genRegisterCSRF(),
         'content-type': 'application/json'
       },
@@ -75,7 +73,7 @@ export default class RobloxUtils {
   static async getFieldData() {
     const res = await fetch('https://auth.roblox.com/v2/signup', {
       headers: {
-        'user-agent': UserAgent(),
+        'user-agent': UserAgent.getRandom(),
         'x-csrf-token': await this.genRegisterCSRF(),
         'content-type': 'application/json'
       },
@@ -126,7 +124,7 @@ export default class RobloxUtils {
     const res = await fetch(url, {
       method: 'POST',
       headers: {
-        'user-agent': UserAgent(),
+        'user-agent': UserAgent.getRandom(),
         'x-csrf-token': await this.genRegisterCSRF(),
         'content-type': 'application/json'
       },
@@ -142,7 +140,7 @@ export default class RobloxUtils {
     const cookie = regex.exec(cookies)?.[1];
 
     if (!cookie) {
-      console.log(`[❌] Failed to find a cookie in the response!\n${json}`);
+      console.log(`[❌] Failed to find a cookie in the response!\n${JSON.stringify(json)}`);
       return null;
     }
 
