@@ -20,7 +20,7 @@ function randomBetween(min, max) {
 function randomBirthday() {
   const randomDay = randomBetween(1, 28); // 28 incase february
   const randomMonth = months[Math.floor(Math.random() * months.length)];
-  const randomYear = randomBetween(1923, new Date().getFullYear()); // 1923 to current year
+  const randomYear = randomBetween(1923, new Date().getFullYear() - 14); // 1923 to (subtract 14 from current year)
 
   return `${randomDay} ${randomMonth} ${randomYear}`;
 }
