@@ -1,56 +1,20 @@
-import mysql from 'mysql2/promise';
+import veduDb from '@vedux/vedudb';
 import RobloxAccount from './rbx/RobloxAccount.js';
 
 class DBUtil {
-  host;
-  user;
-  pass;
-  database;
-
-  /**
-   * @type {mysql.Connection}
-   */
-  connection;
-
   constructor() {}
+
   /**
-   * Connects to the MySQL database
-   * @returns {Promise<boolean>}
+   * Initalize the VeduDB database
+   * @param {string} _database Give the database a file name like, database.json
+   * @returns {boolean}
    */
-  async connect() {
+  async setupDB(_database) {
     try {
-      this.connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_DB
-      });
-
-      console.log('[✅] Connected to the database');
-
-      return true;
-    } catch (ex) {
-      console.log(`[❌] Failed to connect to the database (${ex})`);
-
-      return false;
+      this.database = new veduDb(_database);
+    } catch (e) {
+      return new TypeError('Please provide a valid databse name!');
     }
-  }
-
-  /**
-   * Setups the MySQL database
-   */
-  async setupDB() {
-    try {
-      await this.connection.execute(`
-            CREATE TABLE \`accounts\` (
-                id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                user_id BIGINT NOT NULL,
-                username VARCHAR(30) NOT NULL,
-                password VARCHAR(30) NOT NULL,
-                cookie VARCHAR(900) NOT NULL
-            );`);
-      console.log('[✅] Created accounts table');
-    } catch (ex) {}
   }
 
   /**
@@ -63,10 +27,12 @@ class DBUtil {
    */
   async addAccount(userId, username, password, cookie) {
     try {
-      await this.connection.execute(
-        'INSERT INTO `accounts` (user_id, username, password, cookie) VALUES (?, ?, ?, ?)',
-        [userId, username, password, cookie]
-      );
+      await this.database.set(username, {
+        username: username,
+        userId: userId,
+        password: password,
+        cookie: cookie
+      });
       console.log(`[✅] Account ${username} inserted into the database!`);
     } catch (err) {
       console.log('[❌] Error inserting account: ' + err);
@@ -78,29 +44,42 @@ class DBUtil {
    * @returns {Promise<RobloxAccount>}
    */
   async getRandomAccount() {
-    const results = await this.connection.execute(
-      'SELECT * FROM accounts ORDER BY rand() LIMIT 1'
-    );
+    function countProperties(obj) {
+      var count = 0;
 
-    const row = results[0][0];
+      for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) ++count;
+      }
 
-    const account = new RobloxAccount(
-      row.username,
-      row.user_id,
-      row.password,
-      row.cookie
-    );
+      return count;
+    }
 
-    return account;
+    function findRandom(obj, countt) {
+      var count = 0;
+      var data;
+      for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+          count++;
+          data = obj[prop];
+        }
+        if (count === countt) break;
+      }
+
+      return data;
+    }
+
+    let accountList = this.database.fetchAll();
+    let count = countProperties(await accountList);
+
+    let random = Math.floor(Math.random() * count);
+    let randomAcc = findRandom(await accountList, random);
+
+    return randomAcc;
   }
 
   // Add a method to get all accounts from db
   async getAllAccounts() {
-    const results = await this.connection.execute('SELECT * FROM accounts');
-
-    const row = results[0];
-
-    return row;
+    return this.database.fetchAll();
   }
 }
 
