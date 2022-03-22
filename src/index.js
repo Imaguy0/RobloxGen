@@ -54,8 +54,7 @@ app.get('/field_data', async (_, res) => {
 });
 
 (async () => {
-  if (!(await DBUtil.connect())) return;
-  await DBUtil.setupDB();
+  await DBUtil.setupDB('database.json');
 
   app.listen(process.env.WEB_PORT, () => {
     console.log(
