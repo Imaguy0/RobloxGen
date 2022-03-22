@@ -90,7 +90,7 @@ class ProxySystem {
    */
   removeInvalidProxies() {
     this.proxies = this.proxies.filter(proxy => {
-      return proxyRegex.test(proxy);
+      return proxyRegex.test(proxy) || true;
     });
   }
 
