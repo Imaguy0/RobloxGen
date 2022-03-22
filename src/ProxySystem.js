@@ -4,8 +4,7 @@ import fetch from 'node-fetch'
 import ProxyAgent from 'proxy-agent'
 
 const proxiesFile = 'proxies.txt';
-const proxyRegex =
-  /([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\:?([0-9]{1,5})?/;
+const proxyRegex = new RegExp('^(?:(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|(?:https?://)?(?![\d.]+:)\w+(?:\.\w+)*:\d+\S+|\w+:\w+@(?![\d.]+:)\w+(?:\.\w+)*:\d+)$');
 const scrape_urls = [
   {
     name: 'TheSpeedX Proxy List',
@@ -108,8 +107,8 @@ class ProxySystem {
    * @returns {ProxyAgent.ProxyAgent} The selected proxy agent
    */
   getProxyAgent() {
-    console.log('[➖] Current proxy: http://' + this.getProxy());
-    return ProxyAgent('http://' + this.getProxy());
+    console.log('[➖] Current proxy: ' + this.getProxy());
+    return ProxyAgent(this.getProxy());
   }
 
   /**
