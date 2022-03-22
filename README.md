@@ -12,8 +12,6 @@ You can use these accounts for exploiting or botting.
 
 Node.JS and npm
 
-MySQL
-
 ## Setup
 [Setup Guide here](https://github.com/jluims/RobloxGen/wiki)
 ## Database Setup
