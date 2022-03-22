@@ -50,7 +50,9 @@ You can contribute to this project by opening issues and making pull requests. I
 
 ## Authors
 
-- [@katherinepeterson](https://www.github.com/octokatherine)
+- [jluims](https://github.com/jluims/) - original readme
+
+- [WaltDisneyWorld](https://github.com/WaltDisneyWorld) - redesigned readme
 
 
 ## Badges
