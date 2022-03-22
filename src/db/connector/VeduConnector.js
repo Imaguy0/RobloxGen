@@ -1,20 +1,21 @@
 import veduDb from '@vedux/vedudb';
-import RobloxAccount from './rbx/RobloxAccount.js';
+import DBConnector from './DBConnector.js';
+import RobloxAccount from '../../rbx/RobloxAccount.js';
 
-class DBUtil {
-  constructor() {}
-
+class VeduConnector extends DBConnector {
   /**
    * Initalize the VeduDB database
-   * @param {string} _database Give the database a file name like, database.json
    * @returns {Promise<boolean>}
    */
-  async setupDB(_database) {
+  async setupDB() {
     try {
-      this.database = new veduDb(_database);
-    } catch (e) {
-      return new TypeError('Please provide a valid databse name!');
+      this.database = new veduDb('database.json');
+    } catch (err) {
+      console.log(`[❌] Unexpected vedu error (${err})`);
+      return false;
     }
+
+    return true;
   }
 
   /**
@@ -27,7 +28,7 @@ class DBUtil {
    */
   async addAccount(userId, username, password, cookie) {
     try {
-      await this.database.set(username, {
+      await this.database.set(userId.toString(), {
         username: username,
         userId: userId,
         password: password,
@@ -78,11 +79,10 @@ class DBUtil {
       return data;
     }
 
-    let accountList = this.database.fetchAll();
-    let count = countProperties(await accountList);
+    let accountList = await this.getAllAccounts();
+    let count = countProperties(accountList);
 
-    let random = Math.floor(Math.random() * count);
-    let randomAcc = findRandom(await accountList, random);
+    let randomAcc = findRandom(accountList, Math.floor(Math.random() * count));
 
     return randomAcc;
   }
@@ -92,8 +92,8 @@ class DBUtil {
    * @returns {Promise<RobloxAccount[]>}
    */
   async getAllAccounts() {
-    return this.database.fetchAll();
+    return await this.database.fetchAll();
   }
 }
 
-export default new DBUtil();
+export default new VeduConnector();
