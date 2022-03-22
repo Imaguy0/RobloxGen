@@ -4,6 +4,7 @@ dotenv.config();
 import express from 'express';
 import DBUtil from './DBUtil.js';
 import RobloxUtil from './rbx/RobloxUtils.js';
+import ProxySystem from './ProxySystem.js'
 import cors from 'cors';
 
 const app = express();
@@ -56,6 +57,10 @@ app.get('/field_data', async (_, res) => {
 (async () => {
   if (!(await DBUtil.connect())) return;
   await DBUtil.setupDB();
+
+  if (!await ProxySystem.loadProxies()) {
+    process.exit();
+  }
 
   app.listen(process.env.WEB_PORT, () => {
     console.log(

@@ -3,20 +3,45 @@ import fetch from 'node-fetch';
 import RobloxAccount from './RobloxAccount.js';
 import username from 'username-generator';
 import UserAgent from '../UserAgent.js';
+import ProxySystem from '../ProxySystem.js'
 import { randomBirthday, randomGender } from './RobloxRandomizer.js'
 
 UserAgent();
 
 export default class RobloxUtils {
+
+  /**
+   * 
+   * @param {RequestInfo} url 
+   * @param {RequestInit} init 
+   * @returns {Promise<Response>} The fetched response
+   */
+  static async doProxiedRequest(url, init) {
+    try {
+      return await fetch(url, init);
+    } catch (err) {
+      console.log(err);
+      ProxySystem.rotateProxy();
+      return await this.doProxiedRequest(url, init);
+    }
+  }
+
   /**
    * Generates a valid ROBLOX CSRF token
    * @returns {Promise<string>} - The generated CSRF token
    */
   static async genRegisterCSRF() {
-    const res = await fetch('https://roblox.com/');
+    const res = await this.doProxiedRequest('https://roblox.com/', {
+      agent: ProxySystem.getProxyAgent()
+    });
+
     const txt = await res.text();
     const root = htmlParser.parse(txt);
-    return root.querySelector('#rbx-body > meta').rawAttrs.split('"')[3];
+    const csrf = root.querySelector('#rbx-body > meta')?.rawAttrs.split('"')[3];
+    if (csrf == null) {
+      ProxySystem.rotateProxy();
+      return await this.genRegisterCSRF();
+    }
   }
   /**
    * Checks if username it's available
@@ -25,13 +50,14 @@ export default class RobloxUtils {
    */
   static async checkUsername(username) {
     const url = 'https://auth.roblox.com/v1/usernames/validate';
-    const res = await fetch(url, {
+    const res = await this.doProxiedRequest(url, {
       method: 'POST',
       headers: {
         'User-Agent': UserAgent(),
         'x-csrf-token': await this.genRegisterCSRF(),
         'content-type': 'application/json'
       },
+      agent: ProxySystem.getProxyAgent(),
       body: JSON.stringify({
         username: username,
         context: 'Signup',
@@ -73,12 +99,13 @@ export default class RobloxUtils {
    * @returns {Promise<string>}
    */
   static async getFieldData() {
-    const res = await fetch('https://auth.roblox.com/v2/signup', {
+    const res = await this.doProxiedRequest('https://auth.roblox.com/v2/signup', {
       headers: {
         'user-agent': UserAgent(),
         'x-csrf-token': await this.genRegisterCSRF(),
         'content-type': 'application/json'
       },
+      agent: ProxySystem.getProxyAgent(),
       body: '{}',
       method: 'POST'
     });
@@ -87,7 +114,7 @@ export default class RobloxUtils {
     const fieldData = json?.failureDetails?.[0]?.fieldData;
 
     if (!fieldData) {
-      console.log('[❌] Failed to get field data!');
+      console.log('[❌] Failed to get field data! ' + JSON.stringify(json));
       return '';
     }
 
@@ -123,13 +150,14 @@ export default class RobloxUtils {
       captchaId: captchaId
     };
 
-    const res = await fetch(url, {
+    const res = await this.doProxiedRequest(url, {
       method: 'POST',
       headers: {
         'user-agent': UserAgent(),
         'x-csrf-token': await this.genRegisterCSRF(),
         'content-type': 'application/json'
       },
+      agent: ProxySystem.getProxyAgent(),
       body: JSON.stringify(payload)
     });
 
