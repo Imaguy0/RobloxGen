@@ -7,7 +7,7 @@ class DBUtil {
   /**
    * Initalize the VeduDB database
    * @param {string} _database Give the database a file name like, database.json
-   * @returns {boolean}
+   * @returns {Promise<boolean>}
    */
   async setupDB(_database) {
     try {
@@ -33,6 +33,7 @@ class DBUtil {
         password: password,
         cookie: cookie
       });
+
       console.log(`[✅] Account ${username} inserted into the database!`);
     } catch (err) {
       console.log('[❌] Error inserting account: ' + err);
@@ -44,6 +45,11 @@ class DBUtil {
    * @returns {Promise<RobloxAccount>}
    */
   async getRandomAccount() {
+    /**
+     * Counts properties
+     * @param  {object} obj
+     * @return {number}
+     */
     function countProperties(obj) {
       var count = 0;
 
@@ -53,7 +59,11 @@ class DBUtil {
 
       return count;
     }
-
+    /**
+     * Finds a random account
+     * @param  {object} obj
+     * @param  {number} countt
+     */
     function findRandom(obj, countt) {
       var count = 0;
       var data;
@@ -77,7 +87,10 @@ class DBUtil {
     return randomAcc;
   }
 
-  // Add a method to get all accounts from db
+  /**
+   * Gets all accounts from the database
+   * @returns {Promise<RobloxAccount[]>}
+   */
   async getAllAccounts() {
     return this.database.fetchAll();
   }
