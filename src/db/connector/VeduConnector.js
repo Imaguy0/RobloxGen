@@ -10,6 +10,7 @@ class VeduConnector extends DBConnector {
   async setupDB() {
     try {
       this.database = new veduDb('database.json');
+      console.log(`[✅] Vedu database setup`);
     } catch (err) {
       console.log(`[❌] Unexpected vedu error (${err})`);
       return false;
