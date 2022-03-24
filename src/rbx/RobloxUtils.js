@@ -46,8 +46,13 @@ export default class RobloxUtils {
    * Generates a username
    * @returns {string} Username
    */
-  static genUsername() {
-    const usr = username.generateUsername();
+  static async genUsername() {
+    let done = false;
+    let usr;
+    while (!done) {
+      usr = username.generateUsername();
+      done = await this.checkUsername(usr);
+    }
 
     return usr;
   }
@@ -98,7 +103,7 @@ export default class RobloxUtils {
    * @returns {Promise<RobloxAccount>}
    */
   static async createAccount(captchaToken, captchaId) {
-    const username = this.genUsername();
+    const username = await this.genUsername();
     const password = this.genPassword();
     const url = 'https://auth.roblox.com/v2/signup';
 
