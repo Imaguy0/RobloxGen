@@ -44,18 +44,27 @@ export default class RobloxUtils {
 
   /**
    * Generates a username
-   * @returns {string} Username
+   * @returns {Promise<string>} Username
    */
   static async genUsername() {
-    let done = false;
-    let usr;
-    while (!done) {
-      usr = username.generateUsername();
-      done = await this.checkUsername(usr);
+    const res = await fetch(
+      'https://story-shack-cdn-v2.glitch.me/generators/username-generator'
+    );
+
+    const json = await res.json();
+    const name = json.data.name;
+
+    // Check if the username is available
+    const available = await this.checkUsername(name);
+
+    // If it's not available, generate another one
+    if (!available) {
+      return await this.genUsername();
     }
 
-    return usr;
+    return name;
   }
+
   /**
    * Generates a password
    * @returns {string} Password
@@ -71,6 +80,7 @@ export default class RobloxUtils {
 
     return endStr;
   }
+
   /**
    * Gets the field data of ROBLOX
    * @returns {Promise<string>}
@@ -96,6 +106,7 @@ export default class RobloxUtils {
 
     return fieldData;
   }
+
   /**
    * Creates a ROBLOX account
    * @param  {string} captchaToken
@@ -145,7 +156,9 @@ export default class RobloxUtils {
     const cookie = regex.exec(cookies)?.[1];
 
     if (!cookie) {
-      console.log(`[❌] Failed to find a cookie in the response!\n${JSON.stringify(json)}`);
+      console.log(
+        `[❌] Failed to find a cookie in the response!\n${JSON.stringify(json)}`
+      );
       return null;
     }
 
