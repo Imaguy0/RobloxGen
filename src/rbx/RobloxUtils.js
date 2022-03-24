@@ -16,6 +16,7 @@ export default class RobloxUtils {
     const root = htmlParser.parse(txt);
     return root.querySelector('#rbx-body > meta').rawAttrs.split('"')[3];
   }
+
   /**
    * Checks if username it's available
    * @param  {string} username

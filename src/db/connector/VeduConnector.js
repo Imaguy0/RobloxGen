@@ -61,6 +61,7 @@ class VeduConnector extends DBConnector {
 
       return count;
     }
+
     /**
      * Finds a random account
      * @param  {object} obj

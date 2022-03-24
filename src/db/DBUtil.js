@@ -2,6 +2,7 @@ import RobloxAccount from '../rbx/RobloxAccount.js';
 import MySQLConnector from './connector/MySQLConnector.js';
 import VeduConnector from './connector/VeduConnector.js';
 import DBConnector from './connector/DBConnector.js';
+
 /**
  * @type {DBConnector}
  */
@@ -20,7 +21,7 @@ switch (process.env.DB_TYPE) {
     break;
 }
 
-console.log('[➖] Using DB type ' + connectorType);
+console.log('[-] Using DB type ' + connectorType);
 
 class DBUtil {
   constructor() {}
