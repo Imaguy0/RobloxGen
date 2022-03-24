@@ -39,7 +39,7 @@ class MySQLConnector extends DBConnector {
    * @returns {Promise<boolean>} If the database was succesfully setup
    */
   async setupDB() {
-    if (!await this._connect()) {
+    if (!(await this._connect())) {
       return false;
     }
     try {
@@ -97,7 +97,6 @@ class MySQLConnector extends DBConnector {
 
     return account;
   }
-  
 }
 
 export default new MySQLConnector();
