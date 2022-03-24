@@ -8,7 +8,7 @@ import { randomBirthday, randomGender } from './RobloxRandomizer.js';
 export default class RobloxUtils {
   /**
    * Generates a valid ROBLOX CSRF token
-   * @returns {Promise<string>} - The generated CSRF token
+   * @returns {Promise<string>} The generated CSRF token
    */
   static async genRegisterCSRF() {
     const res = await fetch('https://roblox.com/');
@@ -84,7 +84,7 @@ export default class RobloxUtils {
 
   /**
    * Gets the field data of ROBLOX
-   * @returns {Promise<string>}
+   * @returns {Promise<string>} Field data
    */
   static async getFieldData() {
     const res = await fetch('https://auth.roblox.com/v2/signup', {
@@ -112,7 +112,7 @@ export default class RobloxUtils {
    * Creates a ROBLOX account
    * @param  {string} captchaToken
    * @param  {string} captchaId
-   * @returns {Promise<RobloxAccount>}
+   * @returns {Promise<RobloxAccount>} ROBLOX account
    */
   static async createAccount(captchaToken, captchaId) {
     const username = await this.genUsername();
