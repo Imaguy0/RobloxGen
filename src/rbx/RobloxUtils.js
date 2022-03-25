@@ -52,6 +52,10 @@ export default class RobloxUtils {
       'https://story-shack-cdn-v2.glitch.me/generators/username-generator'
     );
 
+    if (res.status !== 200) {
+      return username.generateUsername();
+    }
+
     const json = await res.json();
     const name = json.data.name;
 
