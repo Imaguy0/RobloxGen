@@ -1,7 +1,7 @@
 import htmlParser from 'node-html-parser';
 import fetch from 'node-fetch';
 import RobloxAccount from './RobloxAccount.js';
-import username from 'username-generator';
+import UsernameGenerator from '../lib/UsernameGenerator';
 import UserAgent from 'random-useragent';
 import { randomBirthday, randomGender } from './RobloxRandomizer.js';
 
@@ -10,11 +10,18 @@ export default class RobloxUtils {
    * Generates a valid ROBLOX CSRF token
    * @returns {Promise<string>} The generated CSRF token
    */
-  static async genRegisterCSRF() {
+  static async genRegisterCSRF(): Promise<string> {
     const res = await fetch('https://roblox.com/');
     const txt = await res.text();
-    const root = htmlParser.parse(txt);
-    return root.querySelector('#rbx-body > meta').rawAttrs.split('"')[3];
+    const root = htmlParser(txt);
+
+    const csrf = root
+      .querySelector('meta[name="csrf-token"]')!
+      .getAttribute('data-token');
+
+    if (!csrf) throw Error('[❌] Failed to get CSRF token!');
+
+    return csrf;
   }
 
   /**
@@ -22,7 +29,7 @@ export default class RobloxUtils {
    * @param  {string} username
    * @returns {Promise<boolean>}
    */
-  static async checkUsername(username) {
+  static async checkUsername(username: string): Promise<boolean> {
     const url = 'https://auth.roblox.com/v1/usernames/validate';
     const res = await fetch(url, {
       method: 'POST',
@@ -47,13 +54,13 @@ export default class RobloxUtils {
    * Generates a username
    * @returns {Promise<string>} Username
    */
-  static async genUsername() {
+  static async genUsername(): Promise<string> {
     const res = await fetch(
       'https://story-shack-cdn-v2.glitch.me/generators/username-generator'
     );
 
     if (res.status !== 200) {
-      return username.generateUsername();
+      return UsernameGenerator();
     }
 
     const json = await res.json();
@@ -74,7 +81,7 @@ export default class RobloxUtils {
    * Generates a password
    * @returns {string} Password
    */
-  static genPassword() {
+  static genPassword(): string {
     const letters =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!!!!!!!!!@@@@@@@[[][][]][][];;;;;;;';
     const length = 20;
@@ -90,7 +97,7 @@ export default class RobloxUtils {
    * Gets the field data of ROBLOX
    * @returns {Promise<string>} Field data
    */
-  static async getFieldData() {
+  static async getFieldData(): Promise<string> {
     const res = await fetch('https://auth.roblox.com/v2/signup', {
       headers: {
         'user-agent': UserAgent.getRandom(),
@@ -100,6 +107,8 @@ export default class RobloxUtils {
       body: '{}',
       method: 'POST'
     });
+
+    console.log(res.text());
 
     const json = await res.json();
     const fieldData = json?.failureDetails?.[0]?.fieldData;
@@ -118,7 +127,10 @@ export default class RobloxUtils {
    * @param  {string} captchaId
    * @returns {Promise<RobloxAccount>} ROBLOX account
    */
-  static async createAccount(captchaToken, captchaId) {
+  static async createAccount(
+    captchaToken: string,
+    captchaId: string
+  ): Promise<RobloxAccount | null> {
     const username = await this.genUsername();
     const password = this.genPassword();
     const url = 'https://auth.roblox.com/v2/signup';
@@ -156,7 +168,7 @@ export default class RobloxUtils {
 
     const regex =
       /.ROBLOSECURITY=(_\|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.\|_[A-Za-z0-9]+)/g;
-    const cookies = res.headers.get('set-cookie');
+    const cookies = res.headers!.get('set-cookie') || '';
 
     const cookie = regex.exec(cookies)?.[1];
 

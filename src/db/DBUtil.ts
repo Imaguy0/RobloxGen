@@ -1,22 +1,19 @@
 import RobloxAccount from '../rbx/RobloxAccount.js';
+import { Account } from './connector/Account.js';
 import MySQLConnector from './connector/MySQLConnector.js';
 import VeduConnector from './connector/VeduConnector.js';
-import DBConnector from './connector/DBConnector.js';
 
-/**
- * @type {DBConnector}
- */
-let connector;
-let connectorType;
+var connector: VeduConnector | MySQLConnector;
+var connectorType: 'mysql' | 'vedu';
 
 switch (process.env.DB_TYPE) {
   case 'mysql':
-    connector = MySQLConnector;
+    connector = new MySQLConnector();
     connectorType = 'mysql';
     break;
   case 'vedu':
   default:
-    connector = VeduConnector;
+    connector = new VeduConnector();
     connectorType = 'vedu';
     break;
 }
@@ -24,13 +21,11 @@ switch (process.env.DB_TYPE) {
 console.log('[-] Using DB type ' + connectorType);
 
 class DBUtil {
-  constructor() {}
-
   /**
    * Initalize the VeduDB database
    * @returns {Promise<boolean>}
    */
-  async setupDB() {
+  async setupDB(): Promise<boolean> {
     return await connector.setupDB();
   }
 
@@ -42,7 +37,12 @@ class DBUtil {
    * @param  {string} cookie
    * @returns {Promise<void>}
    */
-  async addAccount(userId, username, password, cookie) {
+  async addAccount(
+    userId: number,
+    username: string,
+    password: string,
+    cookie: string
+  ): Promise<void> {
     return await connector.addAccount(userId, username, password, cookie);
   }
 
@@ -50,15 +50,15 @@ class DBUtil {
    * Gets a random ROBLOX account from the database
    * @returns {Promise<RobloxAccount>}
    */
-  async getRandomAccount() {
+  async getRandomAccount(): Promise<RobloxAccount> {
     return await connector.getRandomAccount();
   }
 
   /**
    * Gets all accounts from the database
-   * @returns {Promise<RobloxAccount[]>}
+   * @returns {Promise<Account[] | RobloxAccount[]>}
    */
-  async getAllAccounts() {
+  async getAllAccounts(): Promise<Account[] | RobloxAccount[]> {
     return await connector.getAllAccounts();
   }
 }

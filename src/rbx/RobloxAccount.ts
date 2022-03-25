@@ -1,8 +1,8 @@
 export default class RobloxAccount {
-  username;
-  userId;
-  password;
-  cookie;
+  username: string;
+  userId: number;
+  password: string;
+  cookie: string;
 
   /**
    * @param  {string} username
@@ -11,7 +11,12 @@ export default class RobloxAccount {
    * @param  {string} cookie
    */
 
-  constructor(username, userId, password, cookie) {
+  constructor(
+    username: string,
+    userId: number,
+    password: string,
+    cookie: string
+  ) {
     this.username = username;
     this.userId = userId;
     this.password = password;

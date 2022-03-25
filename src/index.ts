@@ -6,13 +6,13 @@ import cors from 'cors';
 
 const app = express();
 
-app.options('*', cors());
+app.use(cors());
 
 app.use(express.static('web/'));
 
 app.get('/create', async (req, res) => {
-  const captcha = req.query.captcha;
-  const captchaId = req.query.captchaId;
+  const captcha = req.query.captcha as string;
+  const captchaId = req.query.captchaId as string;
 
   if (!captcha || !captchaId) {
     res.json({ success: false, error: 'Missing captcha' });

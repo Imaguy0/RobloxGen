@@ -1,13 +1,13 @@
 import veduDb from '@vedux/vedudb';
-import DBConnector from './DBConnector.js';
-import RobloxAccount from '../../rbx/RobloxAccount.js';
+import RobloxAccount from '../../rbx/RobloxAccount';
 
-class VeduConnector extends DBConnector {
+export default class VeduConnector {
+  database: any;
   /**
    * Initalize the VeduDB database
    * @returns {Promise<boolean>}
    */
-  async setupDB() {
+  async setupDB(): Promise<boolean> {
     try {
       this.database = new veduDb('database.json');
       console.log(`[✅] Vedu database setup`);
@@ -27,7 +27,12 @@ class VeduConnector extends DBConnector {
    * @param  {string} cookie
    * @returns {Promise<void>}
    */
-  async addAccount(userId, username, password, cookie) {
+  async addAccount(
+    userId: number,
+    username: string,
+    password: string,
+    cookie: string
+  ): Promise<void> {
     try {
       await this.database.set(userId.toString(), {
         username: username,
@@ -46,13 +51,13 @@ class VeduConnector extends DBConnector {
    * Gets a random ROBLOX account from the database
    * @returns {Promise<RobloxAccount>}
    */
-  async getRandomAccount() {
+  async getRandomAccount(): Promise<RobloxAccount> {
     /**
      * Counts properties
      * @param  {object} obj
      * @return {number}
      */
-    function countProperties(obj) {
+    function countProperties(obj: object): number {
       var count = 0;
 
       for (var prop in obj) {
@@ -67,9 +72,9 @@ class VeduConnector extends DBConnector {
      * @param  {object} obj
      * @param  {number} countt
      */
-    function findRandom(obj, countt) {
+    function findRandom(obj: object, countt: number) {
       var count = 0;
-      var data;
+      var data: any;
       for (var prop in obj) {
         if (obj.hasOwnProperty(prop)) {
           count++;
@@ -93,9 +98,7 @@ class VeduConnector extends DBConnector {
    * Gets all accounts from the database
    * @returns {Promise<RobloxAccount[]>}
    */
-  async getAllAccounts() {
+  async getAllAccounts(): Promise<RobloxAccount[]> {
     return await this.database.fetchAll();
   }
 }
-
-export default new VeduConnector();

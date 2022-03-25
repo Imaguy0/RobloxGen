@@ -1,29 +1,35 @@
 import mysql from 'mysql2/promise';
-import DBConnector from './DBConnector.js';
 import RobloxAccount from '../../rbx/RobloxAccount.js';
+import { Account } from './Account';
 
-class MySQLConnector extends DBConnector {
-  host;
-  user;
-  pass;
-  database;
+export default class MySQLConnector {
+  host: string | undefined;
+  user: string | undefined;
+  pass: string | undefined;
+  database: string | undefined;
 
-  /**
-   * @type {mysql.Connection}
-   */
-  connection;
+  connection: mysql.Connection | undefined;
+
+  constructor() {
+    this.host = process.env.DB_HOST;
+    this.user = process.env.DB_USER;
+    this.pass = process.env.DB_PASS;
+    this.database = process.env.DB_DB;
+
+    this.connection = undefined;
+  }
 
   /**
    * Connects to the MySQL database
    * @returns {Promise<boolean>} If the database was connected to succesfully
    */
-  async _connect() {
+  async _connect(): Promise<boolean> {
     try {
       this.connection = await mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_DB
+        host: this.host,
+        user: this.user,
+        password: this.pass,
+        database: this.database
       });
 
       console.log('[✅] Connected to the database');
@@ -38,12 +44,12 @@ class MySQLConnector extends DBConnector {
    * Sets up the MySQL database
    * @returns {Promise<boolean>} If the database was succesfully setup
    */
-  async setupDB() {
+  async setupDB(): Promise<boolean> {
     if (!(await this._connect())) {
       return false;
     }
     try {
-      await this.connection.execute(`
+      await this.connection!.execute(`
             CREATE TABLE \`accounts\` (
                 id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 user_id BIGINT NOT NULL,
@@ -65,9 +71,14 @@ class MySQLConnector extends DBConnector {
    * @param  {string} cookie
    * @returns {Promise<void>}
    */
-  async addAccount(userId, username, password, cookie) {
+  async addAccount(
+    userId: number,
+    username: string,
+    password: string,
+    cookie: string
+  ): Promise<void> {
     try {
-      await this.connection.execute(
+      await this.connection!.execute(
         'INSERT INTO `accounts` (user_id, username, password, cookie) VALUES (?, ?, ?, ?)',
         [userId, username, password, cookie]
       );
@@ -81,12 +92,12 @@ class MySQLConnector extends DBConnector {
    * Gets a random ROBLOX account from the database
    * @returns {Promise<RobloxAccount>}
    */
-  async getRandomAccount() {
-    const results = await this.connection.execute(
+  async getRandomAccount(): Promise<RobloxAccount> {
+    const results = await this.connection!.execute(
       'SELECT * FROM accounts ORDER BY rand() LIMIT 1'
     );
 
-    const row = results[0][0];
+    const row: Account = results[0][0];
 
     const account = new RobloxAccount(
       row.username,
@@ -97,6 +108,14 @@ class MySQLConnector extends DBConnector {
 
     return account;
   }
-}
 
-export default new MySQLConnector();
+  /**
+   * Gets all accounts from the database
+   * @returns {Promise<Account[]>}
+   */
+  async getAllAccounts(): Promise<Account[]> {
+    const results = await this.connection!.execute('SELECT * FROM accounts');
+
+    return results[0][0];
+  }
+}
