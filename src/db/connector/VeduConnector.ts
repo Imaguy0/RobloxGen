@@ -66,7 +66,6 @@ export default class VeduConnector {
 
       return count;
     }
-
     /**
      * Finds a random account
      * @param  {object} obj

@@ -23,7 +23,6 @@ export default class RobloxUtils {
 
     return csrf;
   }
-
   /**
    * Checks if username it's available
    * @param  {string} username
@@ -52,7 +51,7 @@ export default class RobloxUtils {
 
   /**
    * Generates a username
-   * @returns {Promise<string>} Username
+   * @returns {string} Username
    */
   static async genUsername(): Promise<string> {
     const res = await fetch(
@@ -63,20 +62,8 @@ export default class RobloxUtils {
       return UsernameGenerator();
     }
 
-    const json = await res.json();
-    const name = json.data.name;
-
-    // Check if the username is available
-    const available = await this.checkUsername(name);
-
-    // If it's not available, generate another one
-    if (!available) {
-      return await this.genUsername();
-    }
-
-    return name;
+    return usr;
   }
-
   /**
    * Generates a password
    * @returns {string} Password
@@ -92,10 +79,9 @@ export default class RobloxUtils {
 
     return endStr;
   }
-
   /**
    * Gets the field data of ROBLOX
-   * @returns {Promise<string>} Field data
+   * @returns {Promise<string>}
    */
   static async getFieldData(): Promise<string> {
     const res = await fetch('https://auth.roblox.com/v2/signup', {
@@ -118,12 +104,11 @@ export default class RobloxUtils {
 
     return fieldData;
   }
-
   /**
    * Creates a ROBLOX account
    * @param  {string} captchaToken
    * @param  {string} captchaId
-   * @returns {Promise<RobloxAccount>} ROBLOX account
+   * @returns {Promise<RobloxAccount>}
    */
   static async createAccount(
     captchaToken: string,

@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import dotenv from 'dotenv/config';
 import express from 'express';
 import DBUtil from './db/DBUtil.js';
 import RobloxUtil from './rbx/RobloxUtils.js';
