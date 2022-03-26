@@ -8,7 +8,7 @@ import { randomBirthday, randomGender } from './RobloxRandomizer.js';
 export default class RobloxUtils {
   /**
    * Generates a valid ROBLOX CSRF token
-   * @returns {Promise<string>} The generated CSRF token
+   * @returns {Promise<string>} - The generated CSRF token
    */
   static async genRegisterCSRF() {
     const res = await fetch('https://roblox.com/');
@@ -16,7 +16,6 @@ export default class RobloxUtils {
     const root = htmlParser.parse(txt);
     return root.querySelector('#rbx-body > meta').rawAttrs.split('"')[3];
   }
-
   /**
    * Checks if username it's available
    * @param  {string} username
@@ -45,31 +44,18 @@ export default class RobloxUtils {
 
   /**
    * Generates a username
-   * @returns {Promise<string>} Username
+   * @returns {string} Username
    */
   static async genUsername() {
-    const res = await fetch(
-      'https://story-shack-cdn-v2.glitch.me/generators/username-generator'
-    );
-
-    if (res.status !== 200) {
-      return username.generateUsername();
+    let done = false;
+    let usr;
+    while (!done) {
+      usr = username.generateUsername();
+      done = await this.checkUsername(usr);
     }
 
-    const json = await res.json();
-    const name = json.data.name;
-
-    // Check if the username is available
-    const available = await this.checkUsername(name);
-
-    // If it's not available, generate another one
-    if (!available) {
-      return await this.genUsername();
-    }
-
-    return name;
+    return usr;
   }
-
   /**
    * Generates a password
    * @returns {string} Password
@@ -85,10 +71,9 @@ export default class RobloxUtils {
 
     return endStr;
   }
-
   /**
    * Gets the field data of ROBLOX
-   * @returns {Promise<string>} Field data
+   * @returns {Promise<string>}
    */
   static async getFieldData() {
     const res = await fetch('https://auth.roblox.com/v2/signup', {
@@ -111,12 +96,11 @@ export default class RobloxUtils {
 
     return fieldData;
   }
-
   /**
    * Creates a ROBLOX account
    * @param  {string} captchaToken
    * @param  {string} captchaId
-   * @returns {Promise<RobloxAccount>} ROBLOX account
+   * @returns {Promise<RobloxAccount>}
    */
   static async createAccount(captchaToken, captchaId) {
     const username = await this.genUsername();
@@ -161,9 +145,7 @@ export default class RobloxUtils {
     const cookie = regex.exec(cookies)?.[1];
 
     if (!cookie) {
-      console.log(
-        `[❌] Failed to find a cookie in the response!\n${JSON.stringify(json)}`
-      );
+      console.log(`[❌] Failed to find a cookie in the response!\n${JSON.stringify(json)}`);
       return null;
     }
 

@@ -13,7 +13,7 @@ class DBConnector {
    * @param  {string} cookie
    */
   async addAccount(userId, username, password, cookie) {}
-
+  
   /**
    * Gets a random ROBLOX account from the database
    * @returns {Promise<RobloxAccount>}

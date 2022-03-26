@@ -19,7 +19,7 @@ const months = [
  * Generates a number between the two parameters
  * @param  {number} min
  * @param  {number} max
- * @returns {number} Random number between min and max
+ * @returns {number}
  */
 function randomBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -27,7 +27,7 @@ function randomBetween(min, max) {
 
 /**
  * Generates a random birthday
- * @returns {string} Birthday
+ * @returns {string}
  */
 function randomBirthday() {
   const randomDay = randomBetween(1, 28); // 28 incase february
@@ -39,7 +39,7 @@ function randomBirthday() {
 
 /**
  * Generates a random gender
- * @returns {number} Gender
+ * @returns {number}
  */
 function randomGender() {
   return randomBetween(1, 2);
@@ -47,7 +47,7 @@ function randomGender() {
 
 /**
  * Generate a random user agent
- * @returns {string} User Agent
+ * @returns {string}
  * @deprecated Not in use
  */
 function randomUserAgent() {
@@ -65,10 +65,6 @@ function randomUserAgent() {
   return endStr;
 }
 
-/**
- * Generates a random user agent
- * @returns {string} User Agent
- */
 const generateUseragent = () => randomUseragent.getRandom();
 
 export { randomBirthday, randomGender, generateUseragent };

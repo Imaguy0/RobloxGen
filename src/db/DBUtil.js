@@ -20,7 +20,7 @@ switch (process.env.DB_TYPE) {
     break;
 }
 
-console.log('[-] Using DB type ' + connectorType);
+console.log('[➖] Using DB type ' + connectorType);
 
 class DBUtil {
   constructor() {}
