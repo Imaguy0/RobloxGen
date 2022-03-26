@@ -93,7 +93,7 @@ export default class MySQLConnector {
    * @returns {Promise<RobloxAccount>}
    */
   async getRandomAccount(): Promise<RobloxAccount> {
-    const results = await this.connection!.execute(
+    const results: any = await this.connection!.execute(
       'SELECT * FROM accounts ORDER BY rand() LIMIT 1'
     );
 
@@ -114,7 +114,9 @@ export default class MySQLConnector {
    * @returns {Promise<Account[]>}
    */
   async getAllAccounts(): Promise<Account[]> {
-    const results = await this.connection!.execute('SELECT * FROM accounts');
+    const results: any = await this.connection!.execute(
+      'SELECT * FROM accounts'
+    );
 
     return results[0][0];
   }

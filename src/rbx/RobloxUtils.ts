@@ -1,7 +1,7 @@
-import htmlParser from 'node-html-parser';
+import { parse } from 'node-html-parser';
 import fetch from 'node-fetch';
 import RobloxAccount from './RobloxAccount.js';
-import UsernameGenerator from '../lib/UsernameGenerator';
+import UsernameGenerator from '../lib/UsernameGenerator.js';
 import UserAgent from 'random-useragent';
 import { randomBirthday, randomGender } from './RobloxRandomizer.js';
 
@@ -13,7 +13,7 @@ export default class RobloxUtils {
   static async genRegisterCSRF(): Promise<string> {
     const res = await fetch('https://roblox.com/');
     const txt = await res.text();
-    const root = htmlParser(txt);
+    const root = parse(txt);
 
     const csrf = root
       .querySelector('meta[name="csrf-token"]')!
@@ -107,8 +107,6 @@ export default class RobloxUtils {
       body: '{}',
       method: 'POST'
     });
-
-    console.log(res.text());
 
     const json = await res.json();
     const fieldData = json?.failureDetails?.[0]?.fieldData;
