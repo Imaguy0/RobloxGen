@@ -62,7 +62,18 @@ export default class RobloxUtils {
       return UsernameGenerator();
     }
 
-    return usr;
+    const json = await res.json();
+    const name = json.data.name;
+
+    // Check if the username is available
+    const available = await this.checkUsername(name);
+
+    // If it's not available, generate another one
+    if (!available) {
+      return await this.genUsername();
+    }
+
+    return name;
   }
   /**
    * Generates a password

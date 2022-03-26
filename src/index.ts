@@ -1,4 +1,4 @@
-import dotenv from 'dotenv/config';
+import 'dotenv/config';
 import express from 'express';
 import DBUtil from './db/DBUtil.js';
 import RobloxUtil from './rbx/RobloxUtils.js';
@@ -9,6 +9,8 @@ const app = express();
 app.use(cors());
 
 app.use(express.static('web/'));
+
+const PORT = process.env.WEB_PORT || 80;
 
 app.get('/create', async (req, res) => {
   const captcha = req.query.captcha as string;
@@ -54,9 +56,7 @@ app.get('/field_data', async (_, res) => {
 (async () => {
   await DBUtil.setupDB();
 
-  app.listen(process.env.WEB_PORT, () => {
-    console.log(
-      '[✅] Web app started on http://localhost:' + process.env.WEB_PORT
-    );
+  app.listen(PORT, () => {
+    console.log('[✅] Web app started on http://localhost:' + PORT);
   });
 })();
