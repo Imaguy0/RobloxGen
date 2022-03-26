@@ -13,9 +13,10 @@ You can use these accounts for exploiting or botting.
 Node.JS and npm
 
 ## Setup
-[Setup Guide here](https://github.com/jluims/RobloxGen/wiki)
-## Database Setup
 
+[Setup Guide here](https://github.com/jluims/RobloxGen/wiki)
+
+## Database Setup
 
 Setup the configuration:
 
@@ -24,7 +25,9 @@ Setup the configuration:
 
 Run the project:
 
-`npm start`
+`npm install`
+`npm run build`
+`npm run start`
 
 ## Usage
 
@@ -52,6 +55,6 @@ You can contribute to this project by opening issues and making pull requests. I
 
 - [WaltDisneyWorld](https://github.com/WaltDisneyWorld) - redesigned readme
 
-
 ## Badges
+
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/)

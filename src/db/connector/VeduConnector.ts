@@ -66,13 +66,12 @@ export default class VeduConnector {
 
       return count;
     }
-
     /**
      * Finds a random account
      * @param  {object} obj
      * @param  {number} countt
      */
-    function findRandom(obj: object, countt: number) {
+    function findRandom(obj: any, countt: number) {
       var count = 0;
       var data: any;
       for (var prop in obj) {

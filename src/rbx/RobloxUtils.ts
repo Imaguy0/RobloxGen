@@ -1,7 +1,7 @@
-import htmlParser from 'node-html-parser';
+import { parse } from 'node-html-parser';
 import fetch from 'node-fetch';
 import RobloxAccount from './RobloxAccount.js';
-import UsernameGenerator from '../lib/UsernameGenerator';
+import UsernameGenerator from '../lib/UsernameGenerator.js';
 import UserAgent from 'random-useragent';
 import { randomBirthday, randomGender } from './RobloxRandomizer.js';
 
@@ -13,7 +13,7 @@ export default class RobloxUtils {
   static async genRegisterCSRF(): Promise<string> {
     const res = await fetch('https://roblox.com/');
     const txt = await res.text();
-    const root = htmlParser(txt);
+    const root = parse(txt);
 
     const csrf = root
       .querySelector('meta[name="csrf-token"]')!
@@ -23,7 +23,6 @@ export default class RobloxUtils {
 
     return csrf;
   }
-
   /**
    * Checks if username it's available
    * @param  {string} username
@@ -52,7 +51,7 @@ export default class RobloxUtils {
 
   /**
    * Generates a username
-   * @returns {Promise<string>} Username
+   * @returns {string} Username
    */
   static async genUsername(): Promise<string> {
     const res = await fetch(
@@ -76,7 +75,6 @@ export default class RobloxUtils {
 
     return name;
   }
-
   /**
    * Generates a password
    * @returns {string} Password
@@ -92,10 +90,9 @@ export default class RobloxUtils {
 
     return endStr;
   }
-
   /**
    * Gets the field data of ROBLOX
-   * @returns {Promise<string>} Field data
+   * @returns {Promise<string>}
    */
   static async getFieldData(): Promise<string> {
     const res = await fetch('https://auth.roblox.com/v2/signup', {
@@ -108,8 +105,6 @@ export default class RobloxUtils {
       method: 'POST'
     });
 
-    console.log(res.text());
-
     const json = await res.json();
     const fieldData = json?.failureDetails?.[0]?.fieldData;
 
@@ -120,12 +115,11 @@ export default class RobloxUtils {
 
     return fieldData;
   }
-
   /**
    * Creates a ROBLOX account
    * @param  {string} captchaToken
    * @param  {string} captchaId
-   * @returns {Promise<RobloxAccount>} ROBLOX account
+   * @returns {Promise<RobloxAccount>}
    */
   static async createAccount(
     captchaToken: string,
