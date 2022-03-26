@@ -158,7 +158,7 @@ export default class RobloxUtils {
       /.ROBLOSECURITY=(_\|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.\|_[A-Za-z0-9]+)/g;
     const cookies = res.headers.get('set-cookie');
 
-    const cookie = regex.exec(cookies)?.[1].split('|')[2];
+    const cookie = regex.exec(cookies)?.[1];
 
     if (!cookie) {
       console.log(

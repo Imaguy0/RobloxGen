@@ -19,8 +19,7 @@
     "node-fetch": "^2.6.7",
     "node-html-parser": "^5.1.0",
     "random-useragent": "^0.5.0",
-    "username-generator": "^1.1.0",
-    "write-file-atomic": "^4.0.1"
+    "username-generator": "^1.1.0"
   },
   "type": "module",
   "prettier": {

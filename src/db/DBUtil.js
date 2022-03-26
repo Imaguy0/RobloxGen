@@ -2,8 +2,6 @@ import RobloxAccount from '../rbx/RobloxAccount.js';
 import MySQLConnector from './connector/MySQLConnector.js';
 import VeduConnector from './connector/VeduConnector.js';
 import DBConnector from './connector/DBConnector.js';
-import FileConnector from './connector/FileConnector.js';
-
 /**
  * @type {DBConnector}
  */
@@ -14,10 +12,6 @@ switch (process.env.DB_TYPE) {
   case 'mysql':
     connector = MySQLConnector;
     connectorType = 'mysql';
-    break;
-  case 'file':
-    connector = FileConnector;
-    connectorType = 'file';
     break;
   case 'vedu':
   default:
