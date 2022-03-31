@@ -31,7 +31,7 @@ class FileConnector {
    * @param  {string} cookie
    */
   async addAccount(userId, username, password, cookie) {
-    this.currentData += `${userId} ${username} ${password} ${cookie}\n`;
+    this.currentData += `${userId}:${username}:${password}:${cookie}\n`;
     await writeFileAtomic('accounts.txt', this.currentData);
 
     console.log(`[✅] Account ${username} inserted into the database!`);
@@ -49,13 +49,10 @@ class FileConnector {
     }
 
     const entry = accounts[Math.floor(Math.random() * accounts.length)];
-    const entryData = entry.split(' ');
+    const entryData = entry.split(':');
 
     return new RobloxAccount(
-      entryData[0],
-      entryData[1],
-      entryData[2],
-      entryData[3]
+      ...entryData
     );
   }
 
@@ -68,13 +65,10 @@ class FileConnector {
     const accounts = [];
 
     for (const account of fileAccounts) {
-      const accountData = account.split(' ');
+      const accountData = account.split(':');
       accounts.push(
         new RobloxAccount(
-          accountData[0],
-          accountData[1],
-          accountData[2],
-          accountData[3]
+          ...accountData
         )
       );
     }
@@ -87,7 +81,7 @@ class FileConnector {
    * @returns {string[]} An array of accounts with values split by ' '
    */
   _getSplitAccounts() {
-    const accounts = this.currentData.replace(/\r\n|\n+$/, '').split(/\n|\r\n/); // remove final newline
+    const accounts = this.currentData.replace(/(\r?\n)+$/, '').split(/(\r?\n)/); // remove final newline
 
     return accounts;
   }
