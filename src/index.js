@@ -2,13 +2,15 @@ import 'dotenv/config';
 import express from 'express';
 import DBUtil from './db/DBUtil.js';
 import RobloxUtil from './rbx/RobloxUtils.js';
-import cors from 'cors';
 
 const app = express();
 
-app.options('*', cors());
-
 app.use(express.static('web/'));
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.get('/create', async (req, res) => {
   const captcha = req.query.captcha;
